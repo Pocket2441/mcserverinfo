@@ -1,170 +1,194 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Minecraft Server Info</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #1e1e1e;
-            color: #f0f0f0;
-            text-align: center;
-            padding: 40px;
-        }
-        h1 {
-            color: #00eaff;
-        }
-        h3 {
-            margin-top: 10px;
-        }
-        .server-block, .version-block {
-            background: #2b2b2b;
-            border-radius: 8px;
-            padding: 20px;
-            margin: 25px auto;
-            width: 90%;
-            max-width: 650px;
-        }
-        .desc {
-            font-size: 0.95rem;
-            color: #ccc;
-            margin-bottom: 10px;
-        }
-        .copy-box {
-            cursor: pointer;
-            color: #00eaff;
-            font-weight: bold;
-            word-break: break-all;
-        }
-        .copy-box:hover {
-            text-decoration: underline;
-        }
-        .copied {
-            color: #4caf50;
-            font-size: 0.9rem;
-            margin-top: 8px;
-            display: none;
-        }
-        .version-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-            gap: 15px;
-            margin-top: 20px;
-        }
-        .version-card {
-            background: #1f1f1f;
-            border: 2px solid #444;
-            border-radius: 8px;
-            padding: 15px;
-        }
-        .java {
-            border-color: #00eaff;
-        }
-        .bedrock {
-            border-color: #4caf50;
-        }
-        .icon {
-            font-size: 2rem;
-        }
-        footer {
-            margin-top: 40px;
-            font-size: 0.9rem;
-            color: #aaa;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Minecraft Server Info</title>
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background-color: #1e1e1e;
+    color: #f0f0f0;
+    text-align: center;
+    padding: 40px;
+}
+h1 { color: #00eaff; }
+
+.server-block, .version-block {
+    background: #2b2b2b;
+    border-radius: 8px;
+    padding: 20px;
+    margin: 25px auto;
+    width: 90%;
+    max-width: 650px;
+}
+
+.desc {
+    font-size: 0.95rem;
+    color: #ccc;
+}
+
+.copy-box {
+    cursor: pointer;
+    color: #00eaff;
+    font-weight: bold;
+    word-break: break-all;
+}
+.copy-box:hover { text-decoration: underline; }
+
+.copied {
+    color: #4caf50;
+    font-size: 0.9rem;
+    margin-top: 8px;
+    display: none;
+}
+
+/* VERSION CARDS */
+.version-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.version-card {
+    background: #1f1f1f;
+    border: 2px solid #444;
+    border-radius: 8px;
+    padding: 15px;
+    transition: 0.3s;
+}
+
+.version-card.active {
+    border-color: #00ffcc;
+    box-shadow: 0 0 15px rgba(0,255,204,0.6);
+}
+
+.icon { font-size: 2rem; }
+
+/* SELECT */
+select {
+    margin-top: 15px;
+    padding: 10px;
+    border-radius: 6px;
+    border: none;
+    font-size: 1rem;
+}
+
+footer {
+    margin-top: 40px;
+    font-size: 0.9rem;
+    color: #aaa;
+}
+</style>
 </head>
+
 <body>
 
-    <h1>🌍 Minecraft Server Info</h1>
-    <p>Everything you need to join — even if you’re new 👇</p>
+<h1>🌍 Minecraft Server Info</h1>
+<p>We’ll highlight the right version automatically — or you can choose 👇</p>
 
-    <!-- WHAT VERSION DO I HAVE -->
-    <div class="version-block">
-        <h2>❓ What Version of Minecraft Do I Have?</h2>
-        <p class="desc">Find your device below to see which version you play.</p>
+<!-- VERSION DETECTOR -->
+<div class="version-block">
+    <h2>❓ What Version Do I Have?</h2>
 
-        <div class="version-grid">
-            <div class="version-card java">
-                <div class="icon">💻</div>
-                <h3>PC (Java Launcher)</h3>
-                <p>You have <strong>Java Edition</strong></p>
-                <p class="desc">Windows, macOS, Linux</p>
-            </div>
+    <label for="deviceSelect"><strong>Select your device:</strong></label><br>
+    <select id="deviceSelect" onchange="manualSelect(this.value)">
+        <option value="">Auto Detect</option>
+        <option value="java">PC (Java Launcher)</option>
+        <option value="bedrock">Mobile</option>
+        <option value="bedrock">Console</option>
+        <option value="bedrock">Windows Store</option>
+    </select>
 
-            <div class="version-card bedrock">
-                <div class="icon">📱</div>
-                <h3>Mobile</h3>
-                <p>You have <strong>Bedrock Edition</strong></p>
-                <p class="desc">Android & iOS</p>
-            </div>
+    <div class="version-grid">
+        <div id="javaCard" class="version-card">
+            <div class="icon">💻</div>
+            <h3>Java Edition</h3>
+            <p>Windows / macOS / Linux</p>
+        </div>
 
-            <div class="version-card bedrock">
-                <div class="icon">🎮</div>
-                <h3>Console</h3>
-                <p>You have <strong>Bedrock Edition</strong></p>
-                <p class="desc">Xbox, PlayStation, Switch</p>
-            </div>
-
-            <div class="version-card bedrock">
-                <div class="icon">🪟</div>
-                <h3>Windows Store</h3>
-                <p>You have <strong>Bedrock Edition</strong></p>
-                <p class="desc">Windows 10 / 11</p>
-            </div>
+        <div id="bedrockCard" class="version-card">
+            <div class="icon">📱🎮</div>
+            <h3>Bedrock Edition</h3>
+            <p>Mobile, Console, Windows Store</p>
         </div>
     </div>
+</div>
 
-    <!-- JAVA -->
-    <div class="server-block">
-        <h2>🧱 Java Edition (PC Only)</h2>
-        <p class="desc">
-            Used on Windows, macOS, and Linux. Supports mods and custom servers.
-        </p>
-        <p class="copy-box" onclick="copyText('girls-unturned.gl.joinmc.link', this)">
-            girls-unturned.gl.joinmc.link
-        </p>
-        <div class="copied">Copied!</div>
-    </div>
+<!-- JAVA -->
+<div id="javaServer" class="server-block">
+    <h2>🧱 Java Edition</h2>
+    <p class="desc">PC players using the Java launcher</p>
+    <p class="copy-box" onclick="copyText('girls-unturned.gl.joinmc.link', this)">
+        girls-unturned.gl.joinmc.link
+    </p>
+    <div class="copied">Copied!</div>
+</div>
 
-    <!-- BEDROCK -->
-    <div class="server-block">
-        <h2>📱 Bedrock Edition (Mobile & Console)</h2>
-        <p class="desc">
-            Used on phones, consoles, and the Windows Store version of Minecraft.
-        </p>
-        <p class="copy-box" onclick="copyText('ring-polymer.gl.at.ply.gg:14195', this)">
-            ring-polymer.gl.at.ply.gg:14195
-        </p>
-        <div class="copied">Copied!</div>
-    </div>
+<!-- BEDROCK -->
+<div id="bedrockServer" class="server-block">
+    <h2>📱 Bedrock Edition</h2>
+    <p class="desc">Mobile, console, and Windows Store players</p>
+    <p class="copy-box" onclick="copyText('ring-polymer.gl.at.ply.gg:14195', this)">
+        ring-polymer.gl.at.ply.gg:14195
+    </p>
+    <div class="copied">Copied!</div>
+</div>
 
-    <!-- XBOX -->
-    <div class="server-block">
-        <h2>🎮 Xbox Players</h2>
-        <p class="desc">
-            Xbox uses Bedrock Edition. You may need to add the profile below.
-        </p>
-        <p class="copy-box" onclick="copyText('PocketCraft#5660', this)">
-            PocketCraft#5660
-        </p>
-        <div class="copied">Copied!</div>
-    </div>
+<!-- XBOX -->
+<div class="server-block">
+    <h2>🎮 Xbox Profile</h2>
+    <p class="copy-box" onclick="copyText('PocketCraft#5660', this)">
+        PocketCraft#5660
+    </p>
+    <div class="copied">Copied!</div>
+</div>
 
-    <footer>
-        <p>Hosted on GitHub Pages | Click to copy 📋</p>
-    </footer>
+<footer>
+<p>Auto-detected using your device | Hosted on GitHub Pages</p>
+</footer>
 
-    <script>
-        function copyText(text, element) {
-            navigator.clipboard.writeText(text);
-            const copiedMsg = element.nextElementSibling;
-            copiedMsg.style.display = "block";
-            setTimeout(() => {
-                copiedMsg.style.display = "none";
-            }, 1500);
-        }
-    </script>
+<script>
+function copyText(text, element) {
+    navigator.clipboard.writeText(text);
+    const msg = element.nextElementSibling;
+    msg.style.display = "block";
+    setTimeout(() => msg.style.display = "none", 1500);
+}
+
+function highlight(version) {
+    document.getElementById("javaCard").classList.remove("active");
+    document.getElementById("bedrockCard").classList.remove("active");
+
+    if (version === "java") {
+        document.getElementById("javaCard").classList.add("active");
+    }
+    if (version === "bedrock") {
+        document.getElementById("bedrockCard").classList.add("active");
+    }
+}
+
+function manualSelect(value) {
+    if (value) highlight(value);
+    else autoDetect();
+}
+
+function autoDetect() {
+    const ua = navigator.userAgent.toLowerCase();
+
+    if (ua.includes("android") || ua.includes("iphone") || ua.includes("ipad")) {
+        highlight("bedrock");
+    } else if (ua.includes("xbox") || ua.includes("playstation") || ua.includes("nintendo")) {
+        highlight("bedrock");
+    } else {
+        highlight("java");
+    }
+}
+
+autoDetect();
+</script>
 
 </body>
 </html>
