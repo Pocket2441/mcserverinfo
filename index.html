@@ -87,40 +87,50 @@ footer {
 <body>
 
 <h1>🌍 Minecraft Server Info</h1>
-<p>We’ll highlight the right version automatically — or you can choose 👇</p>
+<p>We’ll guide you to the correct way to join 👇</p>
 
 <!-- VERSION DETECTOR -->
 <div class="version-block">
-    <h2>❓ What Version Do I Have?</h2>
+    <h2>❓ What Version / Device Do You Play On?</h2>
+    <p class="desc">
+        Some platforms can’t add custom servers — we handle that too.
+    </p>
 
     <label for="deviceSelect"><strong>Select your device:</strong></label><br>
     <select id="deviceSelect" onchange="manualSelect(this.value)">
         <option value="">Auto Detect</option>
         <option value="java">PC (Java Launcher)</option>
-        <option value="bedrock">Mobile</option>
-        <option value="bedrock">Console</option>
-        <option value="bedrock">Windows Store</option>
+        <option value="bedrock">Mobile / Windows Store</option>
+        <option value="console">Console (Xbox / PlayStation / Switch)</option>
     </select>
 
     <div class="version-grid">
         <div id="javaCard" class="version-card">
             <div class="icon">💻</div>
             <h3>Java Edition</h3>
-            <p>Windows / macOS / Linux</p>
+            <p>PC (Java Launcher)</p>
         </div>
 
         <div id="bedrockCard" class="version-card">
-            <div class="icon">📱🎮</div>
+            <div class="icon">📱</div>
             <h3>Bedrock Edition</h3>
-            <p>Mobile, Console, Windows Store</p>
+            <p>Mobile / Windows Store</p>
+        </div>
+
+        <div id="consoleCard" class="version-card">
+            <div class="icon">🎮</div>
+            <h3>Console Join Method</h3>
+            <p>Xbox / PlayStation / Switch</p>
         </div>
     </div>
 </div>
 
 <!-- JAVA -->
 <div id="javaServer" class="server-block">
-    <h2>🧱 Java Edition</h2>
-    <p class="desc">PC players using the Java launcher</p>
+    <h2>🧱 Java Edition (PC)</h2>
+    <p class="desc">
+        For players using the Java launcher on Windows, macOS, or Linux.
+    </p>
     <p class="copy-box" onclick="copyText('girls-unturned.gl.joinmc.link', this)">
         girls-unturned.gl.joinmc.link
     </p>
@@ -129,17 +139,29 @@ footer {
 
 <!-- BEDROCK -->
 <div id="bedrockServer" class="server-block">
-    <h2>📱 Bedrock Edition</h2>
-    <p class="desc">Mobile, console, and Windows Store players</p>
+    <h2>📱 Bedrock Edition (Mobile / Windows Store)</h2>
+    <p class="desc">
+        For mobile players and Windows Store Minecraft where custom servers are supported.
+    </p>
     <p class="copy-box" onclick="copyText('ring-polymer.gl.at.ply.gg:14195', this)">
         ring-polymer.gl.at.ply.gg:14195
     </p>
     <div class="copied">Copied!</div>
 </div>
 
-<!-- XBOX -->
-<div class="server-block">
-    <h2>🎮 Xbox Profile</h2>
+<!-- XBOX JOIN METHOD -->
+<div id="consoleServer" class="server-block">
+    <h2>🎮 Console Join Method (No Custom Servers)</h2>
+    <p class="desc">
+        Some consoles <strong>cannot add custom servers</strong>.
+        To join anyway, add the Xbox profile below as a friend and
+        join their world when they are online.
+    </p>
+
+    <p class="desc">
+        Works for: <strong>Xbox, PlayStation, Nintendo Switch</strong>
+    </p>
+
     <p class="copy-box" onclick="copyText('PocketCraft#5660', this)">
         PocketCraft#5660
     </p>
@@ -147,7 +169,7 @@ footer {
 </div>
 
 <footer>
-<p>Auto-detected using your device | Hosted on GitHub Pages</p>
+<p>Auto-detected & auto-scrolled for your device | Hosted on GitHub Pages</p>
 </footer>
 
 <script>
@@ -158,32 +180,58 @@ function copyText(text, element) {
     setTimeout(() => msg.style.display = "none", 1500);
 }
 
-function highlight(version) {
-    document.getElementById("javaCard").classList.remove("active");
-    document.getElementById("bedrockCard").classList.remove("active");
+function clearActive() {
+    ["javaCard","bedrockCard","consoleCard"].forEach(id =>
+        document.getElementById(id).classList.remove("active")
+    );
+}
+
+function scrollToSection(id) {
+    document.getElementById(id).scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+    });
+}
+
+function activate(version) {
+    clearActive();
 
     if (version === "java") {
-        document.getElementById("javaCard").classList.add("active");
+        javaCard.classList.add("active");
+        scrollToSection("javaServer");
     }
     if (version === "bedrock") {
-        document.getElementById("bedrockCard").classList.add("active");
+        bedrockCard.classList.add("active");
+        scrollToSection("bedrockServer");
+    }
+    if (version === "console") {
+        consoleCard.classList.add("active");
+        scrollToSection("consoleServer");
     }
 }
 
 function manualSelect(value) {
-    if (value) highlight(value);
+    if (value) activate(value);
     else autoDetect();
 }
 
 function autoDetect() {
     const ua = navigator.userAgent.toLowerCase();
 
-    if (ua.includes("android") || ua.includes("iphone") || ua.includes("ipad")) {
-        highlight("bedrock");
-    } else if (ua.includes("xbox") || ua.includes("playstation") || ua.includes("nintendo")) {
-        highlight("bedrock");
+    if (
+        ua.includes("xbox") ||
+        ua.includes("playstation") ||
+        ua.includes("nintendo")
+    ) {
+        activate("console");
+    } else if (
+        ua.includes("android") ||
+        ua.includes("iphone") ||
+        ua.includes("ipad")
+    ) {
+        activate("bedrock");
     } else {
-        highlight("java");
+        activate("java");
     }
 }
 
