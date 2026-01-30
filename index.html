@@ -23,13 +23,20 @@
             width: 90%;
             max-width: 500px;
         }
-        a {
+        .copy-box {
+            cursor: pointer;
             color: #00eaff;
-            text-decoration: none;
             font-weight: bold;
+            word-break: break-all;
         }
-        a:hover {
+        .copy-box:hover {
             text-decoration: underline;
+        }
+        .copied {
+            color: #4caf50;
+            font-size: 0.9rem;
+            margin-top: 8px;
+            display: none;
         }
         footer {
             margin-top: 40px;
@@ -40,29 +47,48 @@
 </head>
 <body>
 
-    <h1>🌍 Minecraft Server Info</h1>
+    <h1>Minecraft Server Info</h1>
 
     <div class="server-block">
-        <h2>🧱 Java Edition</h2>
-        <p>Connect with:</p>
-        <p><a href="https://girls-unturned.gl.joinmc.link" target="_blank">girls-unturned.gl.joinmc.link</a></p>
+        <h2>Java Edition</h2>
+        <p class="copy-box" onclick="copyText('girls-unturned.gl.joinmc.link', this)">
+            girls-unturned.gl.joinmc.link
+        </p>
+        <div class="copied">Copied!</div>
     </div>
 
     <div class="server-block">
-        <h2>📱 Bedrock Edition</h2>
-        <p>IP & Port:</p>
-        <p><strong>ring-polymer.gl.at.ply.gg:14195</strong></p>
+        <h2>Bedrock Edition</h2>
+        <p class="copy-box" onclick="copyText('ring-polymer.gl.at.ply.gg:14195', this)">
+            ring-polymer.gl.at.ply.gg:14195
+        </p>
+        <div class="copied">Copied!</div>
     </div>
 
     <div class="server-block">
-        <h2🎮 Xbox / Xbox Live Profile</h2>
-        <p>Xbox Gamer Tag:</p>
-        <p><strong>PocketCraft#5660</strong></p>
+        <h2>Xbox Profile</h2>
+        <p class="copy-box" onclick="copyText('PocketCraft#5660', this)">
+            PocketCraft#5660
+        </p>
+        <div class="copied">Copied!</div>
     </div>
 
     <footer>
-        <p>Thanks for visiting! Join the server and have fun 🎉</p>
+        <p>Click any address to copy 📋</p>
     </footer>
+
+    <script>
+        function copyText(text, element) {
+            navigator.clipboard.writeText(text);
+
+            const copiedMsg = element.nextElementSibling;
+            copiedMsg.style.display = "block";
+
+            setTimeout(() => {
+                copiedMsg.style.display = "none";
+            }, 1500);
+        }
+    </script>
 
 </body>
 </html>
