@@ -101,8 +101,8 @@ footer {
 
     <label for="deviceSelect"><strong>Select your device:</strong></label><br>
     <select id="deviceSelect" onchange="manualSelect(this.value)">
-        <option value="">Auto Detect</option>
-        <option value="java">PC (Java)/Minecraft Launcher</option>
+        <option value="">Chose Device/Platform</option>
+        <option value="java">PC/Minecraft Launcher</option>
         <option value="bedrock">Mobile / Windows Store</option>
         <option value="console">Console (Xbox / PS / Switch)</option>
     </select>
@@ -139,7 +139,7 @@ footer {
 <div id="bedrockServer" class="server-block hidden">
     <h2>📱 Bedrock Edition</h2>
     <p class="desc">Mobile & Windows Store players</p>
-    <p class="copy-box" onclick="copyText('condition-details.gl.at.ply.gg', this)">
+    <p class="copy-box" onclick="copyText('condition-details.gl.at.ply.gg:40585', this)">
         condition-details.gl.at.ply.gg Port: 40585
     </p>
 
@@ -228,11 +228,11 @@ function autoDetect() {
     const ua = navigator.userAgent.toLowerCase();
 
     if (ua.includes("xbox") || ua.includes("playstation") || ua.includes("nintendo")) {
-        activate("console");
+        activate("none");
     } else if (ua.includes("android") || ua.includes("iphone") || ua.includes("ipad")) {
-        activate("bedrock");
+        activate("none");
     } else {
-        activate("console");
+        activate("none");
     }
 }
 
